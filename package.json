@@ -1,0 +1,47 @@
+{
+  "name": "node-streamable-file",
+  "version": "1.0.0",
+  "description": "Cross platform symbol upload tool",
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "ts-node -r dotenv/config ./bin/index.ts **/*.so -d ./spec",
+    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "clean": "rimraf ./dist",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "prerelease": "npm run build",
+    "release": "npm publish --access public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BugSplat-Git/node-streamable-file.git"
+  },
+  "private": false,
+  "keywords": [
+    "node",
+    "fetch",
+    "form-data",
+    "file",
+    "readable",
+    "stream",
+    "createReadStream"
+  ],
+  "author": "@bobbyg603",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BugSplat-Git/node-streamable-file/issues"
+  },
+  "homepage": "https://github.com/BugSplat-Git/node-streamable-file#readme",
+  "devDependencies": {
+    "@types/jasmine": "^4.3.1",
+    "@types/node": "^18.15.10",
+    "jasmine": "^4.6.0",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {}
+}
