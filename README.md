@@ -15,6 +15,8 @@
 
 # node-streamable-file
 
+> ℹ️ This implementation is for Node.js prior to 19.8. For 19.8 or newer, please use [fs.openAsBlob](https://nodejs.org/api/fs.html#fsopenasblobpath-options).
+
 This repo contains a convenience function for creating a [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object that can be appended by [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) and uploaded via [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) using a [ReadableStream](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream). Node.js has a maximum https://nodejs.org/api/buffer.html size of 2 GB. Uploading files that are larger than the [maximum Buffer size](https://nodejs.org/api/buffer.html#bufferconstantsmax_length) will result in an [ERR_FS_FILE_TOO_LARGE](https://nodejs.org/api/errors.html#err_fs_file_too_large) error. The implementation in this repo was inspired by this [StackOverflow](https://stackoverflow.com/a/76026397/2993077) post.
 
 ## ⚙️ Installation
@@ -22,7 +24,13 @@ This repo contains a convenience function for creating a [File](https://develope
 Install this package
 
 ```bash
-npm install node-streamable-file
+npm i node-streamable-file
+```
+
+If you're using Node.js prior to 18.13, you'll also need to install a polyfill for [File](https://nodejs.org/dist/latest-v20.x/docs/api/buffer.html#new-bufferfilesources-filename-options).
+
+```bash
+npm i @web-std/file
 ```
 
 ## 🧑‍💻 Usage
