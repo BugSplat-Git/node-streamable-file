@@ -13,9 +13,9 @@
 
 <br/>
 
-# node-streamable-file
-
 > ℹ️ This implementation is for Node.js prior to 19.8. For 19.8 or newer, please use [fs.openAsBlob](https://nodejs.org/api/fs.html#fsopenasblobpath-options).
+
+# node-streamable-file
 
 This repo contains a convenience function for creating a [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object that can be appended by [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) and uploaded via [Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) using a [ReadableStream](https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream). Node.js has a maximum https://nodejs.org/api/buffer.html size of 2 GB. Uploading files that are larger than the [maximum Buffer size](https://nodejs.org/api/buffer.html#bufferconstantsmax_length) will result in an [ERR_FS_FILE_TOO_LARGE](https://nodejs.org/api/errors.html#err_fs_file_too_large) error. The implementation in this repo was inspired by this [StackOverflow](https://stackoverflow.com/a/76026397/2993077) post.
 
@@ -35,23 +35,30 @@ npm i @web-std/file
 
 ## 🧑‍💻 Usage
 
-Import `createStreamableFile`
+Import `createStreamableFile` from `node-streamable-file` and `open` from `node:fs/promises`.
 
 ```ts
-import { createStreamableFile } from 'node-streamable-file'
+import { createStreamableFile } from 'node-streamable-file';
+import { open } from 'node:fs/promises';
 ```
 
-Call `createStreamableFile` with a path to your file and `append` it to your `FormData` object
+Call `open` with the path to your file to create a `FileHandle` and pass it to `createStreamableFile`. The result of `createStreamableFile` can be appended to a `FormData` object and uploaded via `Fetch`. Be sure to call `handle.close` when you're done with the file.
 
 ```ts
+const path = 'path/to/file.txt';
+const name = basename(path);
+const handle = await open(path);
+const file = await createStreamableFile(name, handle);
+
 const formData = new FormData();
-const file = await createStreamableFile('path/to/file');
-formData.append('file', file);
+formData.append('file', file, name);
 
 await fetch(url, {
   method: 'POST',
   body: formData
 });
+
+handle.close();
 ```
 
 ## 💥 Known Issues

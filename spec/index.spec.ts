@@ -1,16 +1,23 @@
-import { unlink, writeFile } from "fs/promises";
-import { ReadableStream } from "node:stream/web";
-import { createStreamableFile } from "../index";
+import { FileHandle, unlink, writeFile, open } from 'node:fs/promises';
+import { ReadableStream } from 'node:stream/web';
+import { createStreamableFile } from '../index';
+import { basename } from 'node:path';
 
 describe('createStreamableFile', () => {
     const path = 'test.txt';
     const contents = 'Hello World! 🌎';
+    let handle: FileHandle;
 
-    beforeEach(async () => writeFile(path, contents));
+    beforeEach(async () => {
+        await writeFile(path, contents);
+        handle = await open(path);
+    });
 
     it('should read file correctly', async () => {
-        const file = await createStreamableFile(path);
-        const result = await streamToString(file.stream());
+        const name = basename(path);
+        const file = await createStreamableFile(name, handle);
+        const stream = file.stream() as ReadableStream;
+        const result = await streamToString(stream);
         expect(result).toEqual(contents);
     });
 
@@ -24,5 +31,5 @@ async function streamToString(stream: ReadableStream) {
         chunks.push(Buffer.from(chunk));
     }
 
-    return Buffer.concat(chunks).toString("utf-8");
+    return Buffer.concat(chunks).toString('utf-8');
 }
