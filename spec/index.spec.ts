@@ -21,7 +21,10 @@ describe('createStreamableFile', () => {
         expect(result).toEqual(contents);
     });
 
-    afterEach(async () => unlink(path));
+    afterEach(async () => {
+        await handle.close();
+        await unlink(path);
+    });
 });
 
 async function streamToString(stream: ReadableStream) {

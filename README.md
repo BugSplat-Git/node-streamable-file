@@ -58,7 +58,7 @@ await fetch(url, {
   body: formData
 });
 
-handle.close();
+await handle.close();
 ```
 
 ## 💥 Known Issues
